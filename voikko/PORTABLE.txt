@@ -21,10 +21,12 @@ KÄYTTÖÖNOTTO
 5. Napsauta Script Editorin tyhjää koodialuetta ja liitä sisältö Ctrl+V:llä.
    Koodin alussa pitää näkyä version: 1.6.0.
 6. Paina Ctrl+S tai editorin Save As. Anna nimeksi Tarkista suomi (Voikko 1.6),
-   valitse kategoriaksi Suosikit ja paina Save. Skripti näkyy Suosikit-ryhmässä.
+   valitse kategoriaksi Default ja paina Save. Skripti näkyy Default-kategoriassa.
 7. Avaa Script Editorin rataskuvake ja varmista, että Script permissions >
    Network on valittuna. Yhteys kulkee vain oman koneen osoitteeseen
    127.0.0.1:17655.
+   Jos suoritus estyy virheeseen Permission denied, tarkista tämä asetus
+   ja salli Network-oikeus.
 8. Valitse tekstikehys ja aja Tarkista suomi (Voikko 1.6) Affinityssä.
 
 Import Scripts -valikko hyväksyy Affinityn .afscripts-paketit, ei tätä
@@ -42,6 +44,22 @@ Pysäytin varmistaa portin vapautumisen. Jos porttia käyttää toisen kansion
 asennus, se ilmoittaa asiasta eikä väitä pysäyttäneensä ohjelmaa.
 Automaattista käynnistystä tai Windows-palvelua ei asenneta.
 
+WINDOWSIN TAI VIRUSTORJUNNAN ESTO
+Version 1.7 Affinity-oikoluku.exe ei ole digitaalisesti allekirjoitettu.
+
+Jos SmartScreen näyttää ilmoituksen Windows protected your PC, Windows ei
+välttämättä vielä tunne sovellusta. Lataa paketti projektin GitHubin
+Releases-sivulta. More info > Run anyway voi sallia jatkamisen, jos luotat
+lataamaasi julkaisuun. Työ- tai koulukoneen käytäntö voi estää jatkamisen.
+
+Jos virustorjunta nimeää uhan tai siirtää tiedoston karanteeniin, ilmoita
+ylläpitäjälle virustorjunnan nimi, koko hälytysteksti tai uhkan nimi,
+estetty tiedosto ja ohjelmapaketin versio. Havaintoa ei voi päätellä
+vääräksi hälytykseksi pelkän eston perusteella. Älä poista virustorjuntaa
+käytöstä tai lisää koko ohjelmakansiota poikkeuksiin ongelman ratkaisemiseksi.
+Epäilty väärä Microsoft Defender -havainto voidaan lähettää analyysiin:
+https://www.microsoft.com/en-us/wdsi/filesubmission
+
 OIKOLUKUIKKUNA
 Valitse-painike täyttää korvauskentän. Korvaa ja seuraava hyväksyy sanan
 odottamaan tallennusta. OK tekee hyväksytyt muutokset; Cancel peruu erän.
@@ -52,12 +70,14 @@ Sana korostetaan sivulla keltaisella, ja näkymä siirtyy sen aukeamalle.
 Masterista perityt tekstikehykset ja tekstiketjut ovat tuettuja.
 
 TAVUTUS
-Avaa Affinityn asetuksista sen käyttämä Dictionaries-sanastokansio.
+Avaa Settings > Tools ja tarkista Additional dictionary folder.
+Käytä siinä valittua Dictionaries-sanastokansiota.
 Kopioi paketin fi_FI-kansion sisältä hyph_fi_FI.dic sanastokansion
 fi_FI-alikansioon. Luo fi_FI tarvittaessa. Säilytä muut sanastotiedostot
 ja ota vanhasta samannimisestä tavutustiedostosta ensin varmuuskopio.
-Käynnistä Affinity uudelleen. Valitse tavutuskieleksi suomi ja ota kappaleen
-automaattinen tavutus käyttöön. Tavutus ei tarvitse käynnissä olevaa Voikkoa.
+Käynnistä Affinity uudelleen. Valitse Character > Language > Hyphenation
+-kohdassa Finnish (Finland). Ota Paragraph > Hyphenation -kohdassa
+Use auto-hyphenation käyttöön. Tavutus ei tarvitse käynnissä olevaa Voikkoa.
 
 MITÄ SÄILYTÄN?
 Affinity-oikoluku.exe                 tarkistimen käynnistys
