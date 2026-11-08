@@ -6,15 +6,16 @@ asiakirjaan. Tarkistus käynnistyy vain, kun ajat Affinity-skriptin; se ei muuta
 Affinityn omaa oikeinkirjoituksen tarkistusta.
 Ohjelman nimi on **Affinity-oikoluku**; se käyttää Voikko-kirjastoa ja sanastoa.
 
-## Lataa ja ota käyttöön Windowsissa
+## Käyttö valmiilla EXE-paketilla Windowsissa
 
-Valmis [Windows x64 -paketti 1.7](https://github.com/sort0m/affinity-suomi-oikoluku/releases/download/v1.7/Affinity-suomi-ilman-Python-asennusta-1.7.zip)
-sisältää ohjelman ja sen tarvitsemat Voikko-tiedostot. Python-asennusta ei
-tarvita. Työkalu on testattu Affinity 3.3.3:ssa; se tarvitsee Affinityn
-skriptituen.
+Valmis ohjelma on GitHubin [Releases-osiossa](https://github.com/sort0m/affinity-suomi-oikoluku/releases):
+avaa julkaisu **v1.7** ja lataa **Assets**-kohdasta
+[`Affinity-suomi-ilman-Python-asennusta-1.7.zip`](https://github.com/sort0m/affinity-suomi-oikoluku/releases/download/v1.7/Affinity-suomi-ilman-Python-asennusta-1.7.zip).
+`Affinity-oikoluku.exe` on tämän ZIPin sisällä. Paketti sisältää myös tarvittavat
+Voikko-tiedostot, joten Python-asennusta ei tarvita. Työkalu on testattu
+Affinity 3.3.3:ssa; se tarvitsee Affinityn skriptituen.
 
-Lataa ohjelma yllä olevasta paketista. GitHubin Code-valikon ZIP sisältää
-repositorion lähdetiedostot.
+GitHubin **Code > Download ZIP** lataa lähdekoodin, jossa EXEä ei ole.
 
 1. Lataa ZIP ja pura **koko sisältö** pysyvään kansioon, esimerkiksi Asiakirjat-
    kansioon. Säilytä `Affinity-oikoluku.exe` ja `_internal` samassa puretussa kansiossa.
@@ -23,10 +24,27 @@ repositorion lähdetiedostot.
    olevilla ohjeilla.
 4. Valitse Affinityssä tekstikehys ja aja **Tarkista suomi (Voikko 1.6)**.
 
+## Käyttö lähdekoodista ilman EXEä
+
+Lataa lähdekoodi GitHubin **Code > Download ZIP** -valinnalla tai kloonaa
+repositorio. Tarvitset 64-bittisen Pythonin (3.9 tai uudempi).
+
+1. Pura lähdekoodin ZIP ja avaa purettu kansio.
+2. Kaksoisnapsauta `Kaynnista-Affinity-oikoluku.cmd`-tiedostoa. Ensimmäinen
+   käynnistys lataa Voikon kirjaston ja sanaston Voikon ylläpitäjän palvelimelta.
+3. Avaa käynnistyksen luoma `voikko/Tarkista-suomi.js` ja asenna se Affinityyn
+   seuraavan osion ohjeella.
+4. Valitse Affinityssä tekstikehys ja aja **Tarkista suomi (Voikko 1.6)**.
+
+Lähdekoodista käynnistetty ohjelma pysäytetään
+`Pysayta-Affinity-oikoluku.cmd`-tiedostolla.
+
 ## Skriptin asentaminen Affinityyn
 
-1. Avaa `Affinity-oikoluku.exe`-ohjelman viereen syntynyt **Tarkista-suomi.js** Muistiossa.
-   Valitse koko sisältö näppäimillä **Ctrl+A** ja kopioi se **Ctrl+C**.
+1. Avaa käynnistyksen luoma **Tarkista-suomi.js** Muistiossa. EXE-paketissa
+   tiedosto on `Affinity-oikoluku.exe`-ohjelman vieressä, lähdekoodiversiossa
+   `voikko`-kansiossa. Valitse koko sisältö näppäimillä **Ctrl+A** ja kopioi
+   se **Ctrl+C**.
 2. Avaa Affinityssä **Scripts Library** -paneeli. Jos se ei näy, valitse
    **Window > Scripting > Scripts Library**. Avaa paneelin oikean yläkulman
    valikko ja valitse **New Script**.
@@ -45,8 +63,8 @@ valitse jatkossa nimellä **Tarkista suomi (Voikko 1.6)** tallennettu skripti.
 Luotu JS-tiedosto sisältää tämän asennuksen paikallisen avaimen. Älä julkaise
 tai lähetä sitä muille.
 
-Voit pysäyttää ohjelman ilmaisinalueen kuvakkeesta tai paketin
-`Pysayta-Affinity-oikoluku.cmd`-tiedostolla. Tarkemmat ohjeet ovat ZIPin
+EXE-paketin ohjelman voi pysäyttää ilmaisinalueen kuvakkeesta tai paketin
+`Pysayta-Affinity-oikoluku.cmd`-tiedostolla. Paketin tarkemmat ohjeet ovat
 `LUE-ENSIN.txt`-tiedostossa.
 
 **Lisää sanastoon** tallentaa käsiteltävän sanan pysyvästi käyttäjäsanastoon.
@@ -67,10 +85,7 @@ Oikoluku toimii ilman tavutustiedoston asentamista.
 asennuskohtaisen `Tarkista-suomi.js`-tiedoston. Python-palvelu on `voikko`-
 kansiossa; Windows-ohjelman rakentaja on `tools/build_portable.py`.
 
-Lähdekoodiversio tarvitsee 64-bittisen Pythonin (3.9 tai uudempi). Sen voi
-käynnistää `Kaynnista-Affinity-oikoluku.cmd`-tiedostolla; ensimmäinen käynnistys lataa
-Voikon kirjaston ja sanaston Voikon ylläpitäjän palvelimelta. Valmiin ZIPin
-käyttö ei tee tätä latausta.
+Valmiin Releases-ZIPin käyttö ei lataa Voikko-tiedostoja verkosta.
 
 Windows-paketin rakentaminen lähdekoodista:
 
@@ -86,7 +101,7 @@ Testit: `python -m unittest discover -s tests -v` ja
 
 `voikko/runtime/`, `voikko/Tarkista-suomi.js`, puretun ohjelman `data/`
 ja puretun ohjelman `Tarkista-suomi.js` ovat asennuskohtaisia. Älä julkaise
-niitä. Tässä repositoriossa oleva valmis ZIP on rakennettu ennen ensimmäistä
+niitä. Releases-osioon ladattava valmis ZIP on rakennettu ennen ensimmäistä
 käynnistystä, eikä se sisällä näitä tiedostoja.
 
 ## Lisenssit ja lähteet
