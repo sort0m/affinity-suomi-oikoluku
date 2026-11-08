@@ -50,12 +50,13 @@ Lähdekoodista käynnistetty ohjelma pysäytetään
    valikko ja valitse **New Script**.
 3. Napsauta tyhjää koodialuetta **Script Editor** -ikkunassa ja liitä kopioitu
    koodi näppäimillä **Ctrl+V**. Koodin alussa näkyy `version: 1.6.0`.
-4. Paina **Ctrl+S** tai valitse editorin **Save As**. Anna nimeksi esimerkiksi
-   **Tarkista suomi (Voikko 1.6)**, valitse kategoriaksi **Suosikit** ja paina
-   **Save**. Skripti näkyy nyt Scripts Libraryn Suosikit-ryhmässä.
-5. Avaa Script Editorin rataskuvake ja varmista, että **Script permissions >
-   Network** on valittuna.
-   Skripti ottaa yhteyden vain oman koneen osoitteeseen `127.0.0.1:17655`.
+4. Tallenna skripti **Ctrl+S**-näppäimillä tai valitsemalla editorin **Save As**.
+   Anna nimeksi esimerkiksi **Tarkista suomi (Voikko 1.6)**, valitse kategoriaksi
+   **Default** ja paina **Save**. Skripti näkyy Scripts Libraryn Default-kategoriassa.
+5. Avaa Script Editorin rataskuvake ja salli **Script permissions > Network**.
+   Jos skriptin suoritus estyy virheeseen **Permission denied**, tarkista tämä
+   asetus ja salli Network-oikeus. Skripti ottaa yhteyden vain oman koneen
+   osoitteeseen `127.0.0.1:17655`.
 
 **Import Scripts** -valikko on Affinityn `.afscripts`-paketeille. Se ei avaa
 `Tarkista-suomi.js`-tiedostoa. Jos kirjastossa on vanhoja Voikko-versioita,
