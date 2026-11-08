@@ -1,0 +1,87 @@
+SUOMEN OIKOLUKU JA TAVUTUS AFFINITYYN — WINDOWS X64
+Ohjelmapaketti 1.7, oikolukuskripti 1.6
+
+Tämä paketti EI tarvitse erillistä Python-asennusta, Codexia, LibreOfficea,
+Claudea eikä MCP-yhteyttä. Tarvittava Python-ajoympäristö on paketin sisällä.
+Oikoluku tarvitsee Affinityn skriptituen (testattu Affinity 3.3.3:ssa).
+Affinity-oikoluku käyttää mukana toimitettua Voikko-kirjastoa ja sanastoa.
+Käytössä ei tehdä verkkolatauksia.
+
+KÄYTTÖÖNOTTO
+1. Pura koko ZIP pysyvään kansioon, esimerkiksi Asiakirjat-kansioon.
+   Säilytä myös _internal-alikansio: pelkkä EXE ei riitä.
+2. Kaksoisnapsauta Affinity-oikoluku.exe. Ilmaisinalueelle ilmestyy vihreä tarkistusmerkki.
+   Kuvake voi olla kellon vieressä olevan piilotettujen kuvakkeiden nuolen alla.
+   Ohjelma luo omaan kansioonsa tiedoston Tarkista-suomi.js sekä data-kansion.
+3. Avaa TÄSTÄ kansiosta syntynyt Tarkista-suomi.js Muistiossa. Valitse koko
+   sisältö Ctrl+A:lla ja kopioi se Ctrl+C:llä.
+4. Avaa Affinityssä Scripts Library -paneeli (tarvittaessa valinnalla
+   Window > Scripting > Scripts Library).
+   Avaa paneelin oikean yläkulman valikko ja valitse New Script.
+5. Napsauta Script Editorin tyhjää koodialuetta ja liitä sisältö Ctrl+V:llä.
+   Koodin alussa pitää näkyä version: 1.6.0.
+6. Paina Ctrl+S tai editorin Save As. Anna nimeksi Tarkista suomi (Voikko 1.6),
+   valitse kategoriaksi Suosikit ja paina Save. Skripti näkyy Suosikit-ryhmässä.
+7. Avaa Script Editorin rataskuvake ja varmista, että Script permissions >
+   Network on valittuna. Yhteys kulkee vain oman koneen osoitteeseen
+   127.0.0.1:17655.
+8. Valitse tekstikehys ja aja Tarkista suomi (Voikko 1.6) Affinityssä.
+
+Import Scripts -valikko hyväksyy Affinityn .afscripts-paketit, ei tätä
+Tarkista-suomi.js-tiedostoa. Jos vanhoja Voikko-versioita jää kirjastoon,
+käytä nimellä Tarkista suomi (Voikko 1.6) tallennettua skriptiä.
+
+Jos vanha Voikko on käynnissä, pysäytä se VANHAN kansion
+Pysayta-Affinity-oikoluku.cmd-tiedostolla ennen uuden ohjelman käynnistämistä.
+Käynnistä Affinity-oikoluku.exe uudelleen koneen käynnistyksen jälkeen tarpeen mukaan.
+Tämän kansion Pysayta-Affinity-oikoluku.cmd sulkee tämän paketin tarkistimen.
+Voit myös napsauttaa ilmaisinalueen kuvaketta ja valita Sammuta Affinity-oikoluku.
+Sammuttaminen poistaa kuvakkeen ja vapauttaa paikallisen portin.
+Valikon Avaa skriptikansio avaa kansion, jossa Tarkista-suomi.js sijaitsee.
+Pysäytin varmistaa portin vapautumisen. Jos porttia käyttää toisen kansion
+asennus, se ilmoittaa asiasta eikä väitä pysäyttäneensä ohjelmaa.
+Automaattista käynnistystä tai Windows-palvelua ei asenneta.
+
+OIKOLUKUIKKUNA
+Valitse-painike täyttää korvauskentän. Korvaa ja seuraava hyväksyy sanan
+odottamaan tallennusta. OK tekee hyväksytyt muutokset; Cancel peruu erän.
+Lisää sanastoon tallentaa nykyisen sanan ohjelman omaan käyttäjäsanastoon.
+Sanaa ei enää huomauteta tässä tarkistuksessa eikä myöhemmillä käynnistyskerroilla.
+Käyttäjäsanasto tallentuu ohjelmakansion data/user_words.txt-tiedostoon.
+Sana korostetaan sivulla keltaisella, ja näkymä siirtyy sen aukeamalle.
+Masterista perityt tekstikehykset ja tekstiketjut ovat tuettuja.
+
+TAVUTUS
+Avaa Affinityn asetuksista sen käyttämä Dictionaries-sanastokansio.
+Kopioi paketin fi_FI-kansion sisältä hyph_fi_FI.dic sanastokansion
+fi_FI-alikansioon. Luo fi_FI tarvittaessa. Säilytä muut sanastotiedostot
+ja ota vanhasta samannimisestä tavutustiedostosta ensin varmuuskopio.
+Käynnistä Affinity uudelleen. Valitse tavutuskieleksi suomi ja ota kappaleen
+automaattinen tavutus käyttöön. Tavutus ei tarvitse käynnissä olevaa Voikkoa.
+
+MITÄ SÄILYTÄN?
+Affinity-oikoluku.exe                 tarkistimen käynnistys
+_internal/                 ohjelman tarvitsemat kirjastot ja suomen sanasto
+Pysayta-Affinity-oikoluku.cmd          tarkistimen pysäytys
+fi_FI/hyph_fi_FI.dic        tavutustiedosto Affinityyn
+Lisenssit/                 lisenssit ja sovelluksen lähdekoodi
+LUE-ENSIN.txt              tämä ohje
+
+Ensikäynnistyksen jälkeen säilytä myös Tarkista-suomi.js ja data/.
+data/key.txt ja luotu skripti kuuluvat yhteen. Älä jaa niiden sisältöä.
+Siirrä toiselle koneelle alkuperäinen ZIP: se luo uuden avaimen ja skriptin.
+Ohjelmakansiolla on oltava kirjoitusoikeus, joten älä pura Program Filesiin.
+
+Tämä on pyynnöstä ajettava Affinity-oikoluku. Affinityn omat punaiset
+virheviivat käyttävät erillisiä sanastoja. Vanhan projektin fi_FI.aff ja
+fi_FI.dic eivät ole tämän Voikko-ohjelman riippuvuuksia.
+
+LÄHTEET
+Libvoikko 4.3 Windows x64 ja lähdekoodi:
+https://www.puimula.org/htp/testing/voikko-sdk/win-crossbuild/libvoikko-4.3+win1/
+Suomen sanasto ja lähdekoodi (Joukahainen-päivitys 18.6.2024):
+https://www.puimula.org/htp/testing/voikko-snapshot-v5/
+Voikon lisenssit: https://voikko.puimula.org/faq.html
+Paketointi: PyInstaller 6.19.0, https://pyinstaller.org/
+Lisenssit-kansiossa ovat lisenssi- ja lähdekoodiluettelo, sovelluksen
+lähdekoodi sekä käytettyjen Voikko-osien vastaavat lähdekoodipaketit.
