@@ -39,6 +39,26 @@ repositorio. Tarvitset 64-bittisen Pythonin (3.9 tai uudempi).
 Lähdekoodista käynnistetty ohjelma pysäytetään
 `Pysayta-Affinity-oikoluku.cmd`-tiedostolla.
 
+## Jos Windows tai virustorjunta estää EXE:n käynnistyksen
+
+Version 1.7 `Affinity-oikoluku.exe` ei ole digitaalisesti allekirjoitettu.
+
+- **SmartScreen: Windows protected your PC.** Windows voi varoittaa
+  tuntemattomasta sovelluksesta, jolla ei vielä ole riittävää latausmainetta.
+  Lataa paketti tämän projektin GitHubin Releases-sivulta. SmartScreen voi
+  tarjota **More info > Run anyway** -valinnan; käytä sitä vain, jos luotat
+  lataamaasi julkaisuun. Työ- tai koulukoneen käytäntö voi estää jatkamisen.
+- **Virustorjunta nimeää uhan tai siirtää tiedoston karanteeniin.** Ilmoita
+  projektin ylläpitäjälle virustorjunnan nimi, koko hälytysteksti tai uhkan
+  nimi, estetty tiedosto ja ohjelmapaketin versio. Havaintoa ei voi päätellä
+  vääräksi hälytykseksi pelkän eston perusteella. Älä poista virustorjuntaa
+  käytöstä tai lisää koko ohjelmakansiota poikkeuksiin ongelman ratkaisemiseksi.
+
+[Microsoftin SmartScreen-ohje](https://learn.microsoft.com/en-us/windows/apps/package-and-deploy/smartscreen-reputation)
+kertoo mainevaroituksista. Epäilty väärä Microsoft Defender -havainto
+voidaan lähettää [Microsoftin analyysiin](https://www.microsoft.com/en-us/wdsi/filesubmission).
+Allekirjoittaminen voi vähentää mainevaroituksia, mutta ei takaa niiden poistumista.
+
 ## Skriptin asentaminen Affinityyn
 
 1. Avaa käynnistyksen luoma **Tarkista-suomi.js** Muistiossa. EXE-paketissa
