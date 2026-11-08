@@ -1,0 +1,9 @@
+__pycache__/
+*.py[cod]
+.work/
+dist/
+build/
+voikko/runtime/
+voikko/Tarkista-suomi.js
+data/
+Tarkista-suomi.js
