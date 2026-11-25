@@ -1,29 +1,41 @@
-"""Build Windows x64 portable distribution using PyInstaller 6.19.0."""
+"""Build the Windows x64 portable distribution with PyInstaller."""
 from pathlib import Path
 from importlib.metadata import distribution
 from hashlib import sha256
 import shutil
 import subprocess
 import sys
+import sysconfig
 import zipfile
 from build_voikko_icon import make_icon
 
 ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+from voikko.setup import FILES
+from voikko.native import DICTIONARY_FILES, LIBRARY_NAME
+
+VERSION = '1.7.1'
 VOIKKO_SOURCES = {
     'libvoikko-4.3+win1.tar.gz': '594480de1e3611c63d20c2e1d159041aed18ca458dd272e9d7daa783362f4f89',
     'voikko-fi-snapshot.tar.gz': 'a22dc3f9d506e7d7d2022d7854abcae459818df0bd7a9de016e78992f4f535c1',
 }
 
 
+def verify_runtime(runtime):
+    pinned_files = {name: expected for _, name, expected in FILES}
+    for name, expected in (pinned_files | DICTIONARY_FILES).items():
+        path = runtime / name
+        if not path.is_file() or sha256(path.read_bytes()).hexdigest() != expected:
+            raise SystemExit(f'Missing or changed {path}. Run voikko/setup.py before building.')
+
+
 def main():
-    if sys.platform != 'win32':
-        raise SystemExit('Build this Windows distribution on Windows x64.')
+    if sysconfig.get_platform() != 'win-amd64':
+        raise SystemExit('Build this Windows distribution with a Windows x64 Python.')
     runtime = ROOT / 'voikko/runtime'
-    for name in ['libvoikko-1.dll', 'libvoikko.py', '5/mor-standard/mor.vfst']:
-        if not (runtime / name).is_file():
-            raise SystemExit('Run voikko/setup.py before building.')
+    verify_runtime(runtime)
     work = ROOT / '.work/portable-build'
-    dist = ROOT / 'dist/1.7'
+    dist = ROOT / 'dist' / VERSION
     work.mkdir(parents=True, exist_ok=True)
     icon_path = work / 'voikko.ico'
     make_icon(icon_path)
@@ -36,11 +48,12 @@ def main():
                '--distpath', str(dist), '--workpath', str(work / 'work'),
                '--specpath', str(work), '--paths', str(runtime),
                '--hidden-import', 'libvoikko',
-               '--add-binary', f'{runtime / "libvoikko-1.dll"};assets',
-               '--add-data', f'{runtime / "5"};assets/5',
+               '--add-binary', f'{runtime / LIBRARY_NAME};assets',
                '--add-data', f'{ROOT / "voikko/affinity-voikko.js"};assets',
-               '--add-data', f'{icon_path};assets',
-               str(ROOT / 'voikko/portable.py')]
+               '--add-data', f'{icon_path};assets']
+    for name in DICTIONARY_FILES:
+        command.extend(['--add-data', f'{runtime / name};assets/{Path(name).parent.as_posix()}'])
+    command.append(str(ROOT / 'voikko/portable.py'))
     subprocess.run(command, check=True, cwd=ROOT)
     package = dist / 'Affinity-oikoluku'
     (package / 'fi_FI').mkdir(exist_ok=True)
@@ -66,16 +79,16 @@ def main():
     with zipfile.ZipFile(licenses / 'Sovelluksen-lahdekoodi.zip', 'w', zipfile.ZIP_DEFLATED) as source:
         for name in ['README.md', 'LICENSE', 'LISENSSIT-JA-LAHTEET.md',
                      'Kaynnista-Affinity-oikoluku.cmd', 'Pysayta-Affinity-oikoluku.cmd',
-                     'voikko/portable.py', 'voikko/tray.py', 'voikko/server.py',
-                     'voikko/setup.py', 'voikko/manage.py', 'voikko/launch.ps1',
-                     'voikko/affinity-voikko.js', 'voikko/PORTABLE.txt',
-                     'tools/build_portable.py', 'tools/build_voikko_icon.py',
-                     'tools/build_hyphenation.py', 'tests/test_voikko.py',
-                     'tests/test_voikko_script.cjs', 'tests/test_portable_exe.py',
-                     'hyph_fi_FI.dic',
-                     'hyphenation_patterns.txt']:
+                     'voikko/portable.py', 'voikko/tray.py', 'voikko/server.py', 'voikko/native.py',
+                     'voikko/setup.py',
+                     'voikko/manage.py', 'voikko/launch.ps1',
+                     'voikko/affinity-voikko.js', 'tools/build_portable.py',
+                     'tools/build_voikko_icon.py', 'tools/build_hyphenation.py',
+                     'tests/test_voikko.py', 'tests/test_voikko_script.cjs', 'tests/test_portable_exe.py',
+                     'tests/test_voikko_paths.py',
+                     'voikko/PORTABLE.txt', 'hyph_fi_FI.dic', 'hyphenation_patterns.txt']:
             source.write(ROOT / name, name)
-    archive = ROOT / 'Affinity-suomi-ilman-Python-asennusta-1.7.zip'
+    archive = ROOT / f'Affinity-suomi-ilman-Python-asennusta-{VERSION}.zip'
     with zipfile.ZipFile(archive, 'w', zipfile.ZIP_DEFLATED) as output:
         for path in sorted(package.rglob('*')):
             if path.is_file():

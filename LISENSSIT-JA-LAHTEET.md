@@ -1,6 +1,6 @@
 # Lisenssit ja lähdekoodi
 
-Affinity-oikoluku 1.7 on tämän projektin sovellus. Voikko on sen käyttämä
+Affinity-oikoluku 1.7.1 on tämän projektin sovellus. Voikko on sen käyttämä
 erillinen oikolukukirjasto ja sanasto. Tavutustiedosto perustuu Mika Vainion
 AffinityPublisherFISpelling-projektin tiedostoon, ja siihen on tehty muutoksia.
 

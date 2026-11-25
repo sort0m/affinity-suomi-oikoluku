@@ -1,5 +1,6 @@
 """Standalone Windows entry point. Bundled runtime; no installed Python needed."""
 from pathlib import Path
+from datetime import datetime
 import argparse
 import ctypes
 import http.client
@@ -148,9 +149,16 @@ def main():
             checker.close()
         return 0
     except Exception as error:
-        # No document content or key is written to disk.
         message = 'Affinity-oikoluvun pysäytys ei onnistunut.' if args.stop else 'Affinity-oikoluku ei käynnistynyt.'
-        notify(message + '\n\n' + str(error), error=True, quiet=args.quiet)
+        message += '\n\n' + str(error)
+        if isinstance(error, server.VoikkoStartupError):
+            report = root / 'data/Voikko-vianetsinta.txt'
+            try:
+                report.write_text(f'{datetime.now().astimezone().isoformat()}\n{error}\n', encoding='utf-8')
+                message += f'\n\nVianetsintäraportti: {report}'
+            except OSError as write_error:
+                message += f'\n\nRaportin tallennus epäonnistui: {write_error}'
+        notify(message, error=True, quiet=args.quiet)
         return 1
 
 

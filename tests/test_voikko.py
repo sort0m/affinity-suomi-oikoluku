@@ -62,7 +62,8 @@ class NativeVoikkoTests(unittest.TestCase):
             with self.opener.open(req, timeout=3) as response:
                 return response.status, json.load(response)
         except urllib.error.HTTPError as error:
-            return error.code, json.load(error)
+            with error:
+                return error.code, json.load(error)
 
     def test_real_spelling_suggestions_and_normalization(self):
         words = ["oikeinkirjoitus", "talossammekin", "yhdyssanoissa", "maahdollisuutta", "a\u0308iti"]

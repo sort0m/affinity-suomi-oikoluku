@@ -70,7 +70,7 @@ def main():
     if sys.platform == "win32" and pythonw.exists():
         exe = pythonw
     with (RUNTIME / "service.log").open("wb") as log:
-        process = subprocess.Popen([str(exe), str(ROOT / "server.py")],
+        process = subprocess.Popen([str(exe), "-X", "utf8", str(ROOT / "server.py")],
             cwd=ROOT, stdin=subprocess.DEVNULL, stdout=log, stderr=log,
             creationflags=subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0,
             start_new_session=sys.platform != "win32")

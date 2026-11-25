@@ -14,13 +14,58 @@ import urllib.request
 import zipfile
 
 ROOT = Path(__file__).resolve().parent.parent
-ARCHIVE = ROOT / 'Affinity-suomi-ilman-Python-asennusta-1.7.zip'
+ARCHIVE = ROOT / 'Affinity-suomi-ilman-Python-asennusta-1.7.1.zip'
+TEST_ROOT = Path(os.environ.get('VOIKKO_TEST_ROOT', ROOT / '.work/VoikkoTest')).resolve()
 
 
 @unittest.skipUnless(os.name == 'nt' and ARCHIVE.exists(), 'Build the Windows EXE package first')
 class PortableExeTest(unittest.TestCase):
-    def test_fresh_portable_lifecycle_without_python_path(self):
-        folder = Path(tempfile.mkdtemp(prefix='exe-smoke-', dir=ROOT / '.work'))
+    def unpack_and_run(self, parent, subfolder):
+        parent.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(prefix='exe-smoke-', dir=parent) as temp:
+            self.check_lifecycle(Path(temp) / subfolder)
+
+    def test_ascii_installation(self):
+        if not str(TEST_ROOT).isascii():
+            self.skipTest(r'Set VOIKKO_TEST_ROOT to a writable ASCII path, e.g. C:\VoikkoTest')
+        self.unpack_and_run(TEST_ROOT, 'portable')
+
+    def test_accented_installation(self):
+        self.unpack_and_run(TEST_ROOT / 'Äänekoski', 'portable')
+
+    def test_unicode_installation_under_profile(self):
+        profile = Path.home().resolve()
+        # The temp directory is usually in the profile and may be redirected.
+        parent = Path(tempfile.gettempdir()).resolve()
+        if not parent.is_relative_to(profile):
+            parent = profile
+        self.unpack_and_run(parent, 'Käyttäjä-東京')
+
+    def test_missing_dictionary_reports_path_and_cause(self):
+        with tempfile.TemporaryDirectory() as temp:
+            folder = Path(temp) / 'Rikkinäinen'
+            with zipfile.ZipFile(ARCHIVE) as archive:
+                archive.extractall(folder)
+            app = folder / 'Affinity-suomi'
+            assets = app / '_internal/assets'
+            (assets / '5/mor-standard/mor.vfst').unlink()
+            data = app / 'data'
+            data.mkdir()
+            private_word = 'vainhenkilökohtaisessasanastossa'
+            (data / 'user_words.txt').write_text(private_word, encoding='utf-8')
+            result = subprocess.run([str(app / 'Affinity-oikoluku.exe'), '--quiet', '--port', '0'],
+                                    cwd=folder, timeout=15, creationflags=subprocess.CREATE_NO_WINDOW)
+            self.assertEqual(result.returncode, 1)
+            token = (data / 'key.txt').read_text(encoding='ascii').strip()
+            self.assertEqual(len(token), 64)
+            report = (data / 'Voikko-vianetsinta.txt').read_text(encoding='utf-8')
+            self.assertFalse(token in report, 'Report disclosed the service key')
+            self.assertFalse(private_word in report, 'Report disclosed a personal dictionary entry')
+            self.assertIn(str(assets.resolve()).casefold(), report.casefold())
+            self.assertIn('mor.vfst', report)
+            self.assertIn('Sanastotiedostojen tarkistus', report)
+
+    def check_lifecycle(self, folder):
         with zipfile.ZipFile(ARCHIVE) as archive:
             self.assertIsNone(archive.testzip())
             self.assertFalse(any(n.endswith(('key.txt', 'Tarkista-suomi.js')) for n in archive.namelist()))
@@ -31,6 +76,8 @@ class PortableExeTest(unittest.TestCase):
         env['PATH'] = str(Path(os.environ['SystemRoot']) / 'System32')
         env['PYTHONHOME'] = str(folder / 'no-python-installed')
         env['PYTHONPATH'] = str(folder / 'no-python-packages')
+        env.pop('VOIKKO_DICTIONARY_PATH', None)
+        env.pop('VOIKKO_DICTIONARY', None)
         self.assertIsNone(shutil.which('python', path=env['PATH']))
         self.assertIsNone(shutil.which('pythonw', path=env['PATH']))
         with socket.socket() as probe:
@@ -68,9 +115,9 @@ class PortableExeTest(unittest.TestCase):
             generated = (app / 'Tarkista-suomi.js').read_text(encoding='utf-8')
             self.assertNotIn('__VOIKKO_KEY__', generated)
             self.assertIn(f'127.0.0.1:{port}', generated)
-            query = urllib.parse.urlencode({'words': json.dumps(['mahdollisuutta', 'maahdollisuutta'])})
+            query = urllib.parse.urlencode({'words': json.dumps(['mahdollisuutta', 'maahdollisuutta', 'äiti'])})
             result = call('/check?' + query, token)
-            self.assertEqual([r['correct'] for r in result['results']], [True, False])
+            self.assertEqual([r['correct'] for r in result['results']], [True, False, True])
             result = call('/suggest?word=maahdollisuutta', token)
             self.assertIn('mahdollisuutta', result['suggestions'])
             new_word = 'kisssamaailma'
@@ -80,7 +127,8 @@ class PortableExeTest(unittest.TestCase):
             self.assertTrue(call('/check?' + query, token)['results'][0]['correct'])
             with self.assertRaises(urllib.error.HTTPError) as denied:
                 call('/health', 'wrong-key')
-            self.assertEqual(denied.exception.code, 403)
+            with denied.exception as response:
+                self.assertEqual(response.code, 403)
             duplicate = subprocess.run(command, env=env, cwd=folder, timeout=30,
                                        creationflags=subprocess.CREATE_NO_WINDOW)
             self.assertEqual(duplicate.returncode, 0)

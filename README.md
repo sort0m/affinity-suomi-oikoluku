@@ -8,9 +8,9 @@ Ohjelman nimi on **Affinity-oikoluku**; se käyttää Voikko-kirjastoa ja sanast
 
 ## Käyttö valmiilla EXE-paketilla Windowsissa
 
-Valmis ohjelma on GitHubin [Releases-osiossa](https://github.com/sort0m/affinity-suomi-oikoluku/releases):
-avaa julkaisu **v1.7** ja lataa **Assets**-kohdasta
-[`Affinity-suomi-ilman-Python-asennusta-1.7.zip`](https://github.com/sort0m/affinity-suomi-oikoluku/releases/download/v1.7/Affinity-suomi-ilman-Python-asennusta-1.7.zip).
+Windows x64 -korjauspaketin nimi on **Affinity-suomi-ilman-Python-asennusta-1.7.1.zip**.
+Julkaistut ZIP-paketit löytyvät julkaisun **Assets**-kohdasta.
+[GitHub Releases](https://github.com/sort0m/affinity-suomi-oikoluku/releases)
 `Affinity-oikoluku.exe` on tämän ZIPin sisällä. Paketti sisältää myös tarvittavat
 Voikko-tiedostot, joten Python-asennusta ei tarvita. Työkalu on testattu
 Affinity 3.3.3:ssa; se tarvitsee Affinityn skriptituen.
@@ -23,6 +23,19 @@ GitHubin **Code > Download ZIP** lataa lähdekoodin, jossa EXEä ei ole.
 3. Lisää syntynyt `Tarkista-suomi.js` Affinityn **Scripts Libraryyn** alla
    olevilla ohjeilla.
 4. Valitse Affinityssä tekstikehys ja aja **Tarkista suomi (Voikko 1.6)**.
+
+### Jos Voikon alustus epäonnistuu
+
+Versiossa 1.7 sanasto saattoi jäädä löytymättä, jos asennuspolussa oli
+esimerkiksi `ä`. Python-sidos välitti polun UTF-8-tavuina Windows-kirjaston
+ANSI-tiedostorajapinnalle. Versio 1.7.1 valitsee sanaston juuren Windowsin
+Unicode-rajapinnalla. DLL avaa sanaston siitä suhteellisella polulla.
+Käyttäjäprofiilin ja ohjelmakansion nimet voivat sisältää Unicode-merkkejä.
+
+Jos alustus epäonnistuu, EXE näyttää syyn ja tallentaa ohjelmakansioon
+`data/Voikko-vianetsinta.txt`-raportin. Siinä ovat DLL:n polku, sanaston juuri,
+alustusvaihe ja virhe. Poluissa voi näkyä Windows-käyttäjänimi. Raportissa
+ei ole paikallista avainta eikä tarkistettuja sanoja.
 
 ## Käyttö lähdekoodista ilman EXEä
 
@@ -39,25 +52,17 @@ repositorio. Tarvitset 64-bittisen Pythonin (3.9 tai uudempi).
 Lähdekoodista käynnistetty ohjelma pysäytetään
 `Pysayta-Affinity-oikoluku.cmd`-tiedostolla.
 
-## Jos Windows tai virustorjunta estää EXE:n käynnistyksen
+## Windowsin käynnistysvaroitukset
 
-Version 1.7 `Affinity-oikoluku.exe` ei ole digitaalisesti allekirjoitettu.
+`Affinity-oikoluku.exe` ei ole digitaalisesti allekirjoitettu, joten Windows
+voi näyttää SmartScreen-varoituksen. Lataa ohjelma projektin
+[GitHubin Releases-sivulta](https://github.com/sort0m/affinity-suomi-oikoluku/releases).
+Jos luotat lataamaasi julkaisuun, voit jatkaa valinnalla
+**Lisätietoja → Suorita joka tapauksessa**, mikäli Windows tarjoaa sen.
 
-- **SmartScreen: Windows protected your PC.** Windows voi varoittaa
-  tuntemattomasta sovelluksesta, jolla ei vielä ole riittävää latausmainetta.
-  Lataa paketti tämän projektin GitHubin Releases-sivulta. SmartScreen voi
-  tarjota **More info > Run anyway** -valinnan; käytä sitä vain, jos luotat
-  lataamaasi julkaisuun. Työ- tai koulukoneen käytäntö voi estää jatkamisen.
-- **Virustorjunta nimeää uhan tai siirtää tiedoston karanteeniin.** Ilmoita
-  projektin ylläpitäjälle virustorjunnan nimi, koko hälytysteksti tai uhkan
-  nimi, estetty tiedosto ja ohjelmapaketin versio. Havaintoa ei voi päätellä
-  vääräksi hälytykseksi pelkän eston perusteella. Älä poista virustorjuntaa
-  käytöstä tai lisää koko ohjelmakansiota poikkeuksiin ongelman ratkaisemiseksi.
-
-[Microsoftin SmartScreen-ohje](https://learn.microsoft.com/en-us/windows/apps/package-and-deploy/smartscreen-reputation)
-kertoo mainevaroituksista. Epäilty väärä Microsoft Defender -havainto
-voidaan lähettää [Microsoftin analyysiin](https://www.microsoft.com/en-us/wdsi/filesubmission).
-Allekirjoittaminen voi vähentää mainevaroituksia, mutta ei takaa niiden poistumista.
+Jos virustorjunta ilmoittaa nimetystä uhasta tai siirtää tiedoston
+karanteeniin, ilmoita ylläpitäjälle virustorjunnan nimi, hälytysteksti ja
+ohjelman versio. Älä poista virustorjuntaa käytöstä.
 
 ## Skriptin asentaminen Affinityyn
 
@@ -116,9 +121,12 @@ python voikko/setup.py
 python tools/build_portable.py
 ```
 
-Rakentaja tuottaa `Affinity-suomi-ilman-Python-asennusta-1.7.zip`-tiedoston.
-Testit: `python -m unittest discover -s tests -v` ja
-`node --test tests/test_voikko_script.cjs`.
+Rakentaja tuottaa `Affinity-suomi-ilman-Python-asennusta-1.7.1.zip`-tiedoston.
+Aja Windowsin työpöytäistunnossa `python -m unittest discover -s tests -v` ja
+`node --test tests/test_voikko_script.cjs`. EXE-testi purkaa ZIPin myös
+ääkköskansioon ja käyttäjäprofiilin Unicode-polkuun. Voit valita ASCII- ja
+Äänekoski-testien yläkansion asettamalla PowerShellissä
+`$env:VOIKKO_TEST_ROOT = 'C:\VoikkoTest'`.
 
 `voikko/runtime/`, `voikko/Tarkista-suomi.js`, puretun ohjelman `data/`
 ja puretun ohjelman `Tarkista-suomi.js` ovat asennuskohtaisia. Älä julkaise

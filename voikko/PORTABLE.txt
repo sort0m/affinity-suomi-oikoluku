@@ -1,5 +1,5 @@
 SUOMEN OIKOLUKU JA TAVUTUS AFFINITYYN — WINDOWS X64
-Ohjelmapaketti 1.7, oikolukuskripti 1.6
+Ohjelmapaketti 1.7.1, oikolukuskripti 1.6
 
 Tämä paketti EI tarvitse erillistä Python-asennusta, Codexia, LibreOfficea,
 Claudea eikä MCP-yhteyttä. Tarvittava Python-ajoympäristö on paketin sisällä.
@@ -44,8 +44,16 @@ Pysäytin varmistaa portin vapautumisen. Jos porttia käyttää toisen kansion
 asennus, se ilmoittaa asiasta eikä väitä pysäyttäneensä ohjelmaa.
 Automaattista käynnistystä tai Windows-palvelua ei asenneta.
 
+JOS VOIKKO EI KÄYNNISTY
+Versio 1.7.1 avaa sanaston myös silloin, kun käyttäjäprofiilin tai
+ohjelmakansion nimessä on ääkkösiä tai muita Unicode-merkkejä.
+Jos DLL:n tai sanaston avaaminen epäonnistuu, virheikkuna näyttää polut ja
+syyn. Samat tiedot löytyvät ohjelmakansion data/Voikko-vianetsinta.txt-
+tiedostosta. Raportin voi lähettää vianetsintään. Poluissa voi näkyä
+Windows-käyttäjänimi. Raportti ei sisällä avainta eikä tarkistettua tekstiä.
+
 WINDOWSIN TAI VIRUSTORJUNNAN ESTO
-Version 1.7 Affinity-oikoluku.exe ei ole digitaalisesti allekirjoitettu.
+Version 1.7.1 Affinity-oikoluku.exe ei ole digitaalisesti allekirjoitettu.
 
 Jos SmartScreen näyttää ilmoituksen Windows protected your PC, Windows ei
 välttämättä vielä tunne sovellusta. Lataa paketti projektin GitHubin

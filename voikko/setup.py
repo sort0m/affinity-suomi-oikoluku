@@ -8,12 +8,16 @@ import struct
 import urllib.request
 import zipfile
 
+if __package__:
+    from .native import LIBRARY_NAME, LIBRARY_SHA256
+else:
+    from native import LIBRARY_NAME, LIBRARY_SHA256
+
 ROOT = Path(__file__).resolve().parent
 RUNTIME = ROOT / "runtime"
 BASE = "https://www.puimula.org/htp/testing/voikko-sdk/win-crossbuild/libvoikko-4.3+win1/"
 FILES = [
-    (BASE + "win64/libvoikko-1.dll", "libvoikko-1.dll",
-     "bfffd537ff372b425a61940d4f5ac6c80e2a745dab33cc00ac50e8f50441d1b0"),
+    (BASE + "win64/" + LIBRARY_NAME, LIBRARY_NAME, LIBRARY_SHA256),
     (BASE + "libvoikko.py", "libvoikko.py",
      "72f6e4e468dc47d8bde73825c6886d5001d954f72a0b35b47fae31d063ed8536"),
     ("https://www.puimula.org/htp/testing/voikko-snapshot-v5/dict.zip", "dict.zip",

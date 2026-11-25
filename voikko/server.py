@@ -12,6 +12,11 @@ import threading
 import unicodedata
 from urllib.parse import parse_qs, urlsplit
 
+if __package__:
+    from .native import load_voikko, VoikkoStartupError
+else:
+    from native import load_voikko, VoikkoStartupError
+
 ROOT = Path(__file__).resolve().parent
 RUNTIME = ROOT / "runtime"
 PORT = 17655
@@ -26,10 +31,7 @@ class Checker:
                                self.user_words_path.read_text(encoding="utf-8").splitlines()
                                if valid_word(line.strip())}
         if voikko is None:
-            sys.path.insert(0, str(RUNTIME))
-            from libvoikko import Voikko
-            Voikko.setLibrarySearchPath(str(RUNTIME))
-            voikko = Voikko("fi", path=str(RUNTIME))
+            voikko = load_voikko(RUNTIME)
         self.voikko = voikko
 
     @lru_cache(maxsize=4096)
@@ -175,4 +177,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except VoikkoStartupError as error:
+        raise SystemExit(str(error))
